@@ -58,3 +58,7 @@ float detectPitch(float *signals, int signalLen, int fs, float threshold) {
 
   return pitch;
 }
+
+float interpolateLag(float *dPrime, int dLen, int lag) {
+  // lag is the index where CNMDF (dPrime) is minimized
+}
