@@ -8,4 +8,9 @@ void i2s_install();
 void i2s_setpin();
 void i2s_loop();
 
+bool checkMovingAverage(float currentFrequency, int movSize,
+                        float previousFrequencies[], float maxError);
+
+void appendFrequency(float currentFrequency, float previousFrequencies[],
+                     int movSize);
 #endif

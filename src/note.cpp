@@ -60,9 +60,9 @@ NoteAndError findNearestNote(float frequency) {
 
   for (int i = 0; i < numNotes; i++) {
     Note string = notes[i];
-    float error = abs(frequency - string.frequency);
+    float error = frequency - string.frequency;
 
-    if (error <= minError && error < maxError) {
+    if (abs(error) <= minError && abs(error) < maxError) {
       minError = error;
       nearestString = string;
     }

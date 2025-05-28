@@ -16,10 +16,10 @@ double vReal[SAMPLES];
 double vImag[SAMPLES];
 
 // moving average
-const int movSize = 5; // size of the moving average window
-float previousFrequencies[movSize] = {0.0, 0.0, 0.0, 0.0, 0.0};
-float maxError = 2; // maximum difference allowed between moving average mean
-                    // and sample frequency
+// const int movSize = 5; // size of the moving average window
+// float previousFrequencies[movSize] = {0.0, 0.0, 0.0, 0.0, 0.0};
+// float maxError = 2; // maximum difference allowed between moving average mean
+//                     // and sample frequency
 // moving average
 
 ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLE_RATE);
@@ -133,27 +133,27 @@ void i2s_loop() {
   Serial.print(frequency);
   Serial.println(" Hz");
 
-  bool withinMovAvg =
-      checkMovingAverage(frequency, movSize, previousFrequencies, maxError);
+  // bool withinMovAvg =
+  //     checkMovingAverage(frequency, movSize, previousFrequencies, maxError);
 
-  appendFrequency(frequency, previousFrequencies, movSize);
+  // appendFrequency(frequency, previousFrequencies, movSize);
 
-  if (withinMovAvg) {
-    NoteAndError nearestNote = findNearestNote(frequency);
-    Note note = nearestNote.note;
-    float errorFrac = nearestNote.error / 2.0;
+  // if (withinMovAvg) {
+  //   NoteAndError nearestNote = findNearestNote(frequency);
+  //   Note note = nearestNote.note;
+  //   float errorFrac = nearestNote.error / 2.0;
 
-    Serial.println(note.note);
+  //   Serial.println(note.note);
 
-    display.clearDisplay();
-    drawNote(note.note, "");
-    drawPitch(errorFrac);
-    delay(500);
-  } else {
-    display.clearDisplay();
-    drawPitch(0.0);
-  }
-  delay(100);
+  //   display.clearDisplay();
+  //   drawNote(note.note, "");
+  //   drawPitch(errorFrac);
+  //   delay(500);
+  // } else {
+  //   display.clearDisplay();
+  //   drawPitch(0.0);
+  // }
+  // delay(100);
 }
 
 void i2s_setpin() {

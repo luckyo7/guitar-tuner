@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <yin.h>
 // implements YIN algorithm for pitch detection
 
 void differenceFunc(float *x, int xLen, int maxLag, float *d) {
@@ -36,28 +37,30 @@ float detectPitch(float *signals, int signalLen, int fs, float threshold) {
   normalizeDifference(d, dPrime, maxLag);
 
   float pitch = -1;
-  float firstPitch = -1;
-  float lastPitch = -1;
+  float firstLag = -1;
+  float lastLag = -1;
   bool flag = false;
-  float prevError = 0;
-  float outLag; // final lag
+  float outLag = -1; // final lag
   for (int lag = 2; lag < maxLag; lag++) {
-    if (dPrime[lag] < threshold && dPrime[lag] < prevError) {
+    if (dPrime[lag] < threshold && dPrime[lag] < dPrime[lag - 1]) {
       if (!flag) {
-        firstPitch = fs / lag;
-        outLag = lag;
+        firstLag = lag;
         flag = true;
+        outLag = lag;
       }
-      lastPitch = fs / lag;
+      lastLag = lag;
       // break;
     } else if (flag) {
       break;
     }
-
-    prevError = dPrime[lag];
   }
   // pitch = 0.5 * (firstPitch + lastPitch);
-  pitch = fs / interpolateLag(dPrime, maxLag, outLag);
+  // outLag = (firstLag + lastLag) / 2;
+  outLag = lastLag;
+  if (outLag > 0) {
+    float interpolatedLag = interpolateLag(dPrime, maxLag, outLag);
+    pitch = fs / interpolatedLag;
+  }
 
   return pitch;
 }
