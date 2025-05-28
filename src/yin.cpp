@@ -40,10 +40,12 @@ float detectPitch(float *signals, int signalLen, int fs, float threshold) {
   float lastPitch = -1;
   bool flag = false;
   float prevError = 0;
+  float outLag; // final lag
   for (int lag = 2; lag < maxLag; lag++) {
     if (dPrime[lag] < threshold && dPrime[lag] < prevError) {
       if (!flag) {
         firstPitch = fs / lag;
+        outLag = lag;
         flag = true;
       }
       lastPitch = fs / lag;
@@ -54,11 +56,22 @@ float detectPitch(float *signals, int signalLen, int fs, float threshold) {
 
     prevError = dPrime[lag];
   }
-  pitch = 0.5 * (firstPitch + lastPitch);
+  // pitch = 0.5 * (firstPitch + lastPitch);
+  pitch = fs / interpolateLag(dPrime, maxLag, outLag);
 
   return pitch;
 }
 
 float interpolateLag(float *dPrime, int dLen, int lag) {
   // lag is the index where CNMDF (dPrime) is minimized
+  float a = dPrime[lag - 1];
+  float b = dPrime[lag];
+  float c = dPrime[lag + 1];
+  float denominator = (2 * (a - 2 * b + c));
+
+  if (abs(denominator) < 0.1) {
+    return lag;
+  }
+
+  return lag + (a - c) / denominator;
 }
