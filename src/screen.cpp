@@ -1,7 +1,9 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
+#include <note.h>
 #include <screen.h>
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -63,6 +65,15 @@ void drawPitch(float error) {
                    pitchBarHeight, WHITE);
 
   display.display();
+}
+
+void drawMode(Mode mode) {
+  Serial.println(mode.modeName);
+  // display.setTextSize(1);
+  // display.setCursor(1, 1);
+  // display.println(currentMode.modeName);
+
+  // display.display();
 }
 
 void screenSetup() {

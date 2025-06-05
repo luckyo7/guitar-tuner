@@ -22,14 +22,12 @@ struct Mode {
   String modeName;
 };
 
-const Mode allModes[5];
-
-Mode currentMode;
+// Mode currentMode; // want this to be private
 Mode getCurrentMode();
 void setCurrentMode(int modeIndex);
 
-float getFrequency(String note);
-String getNote(float frequency);
+float getFrequency(String note, Mode currentMode);
+String getNote(float frequency, Mode currentMode);
 
 NoteAndError findNearestNote(float frequency);
 

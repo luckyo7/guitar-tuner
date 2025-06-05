@@ -27,7 +27,7 @@ const Mode standardTuning = {9,
                                  {"A", "", 220.00}, // 2nd harmonic of A
                                  {"D", "", 293.66}, // 2nd harmonic of D
                              },
-                             "Standard (EADGBE)"};
+                             "Standard"};
 
 const Mode halfStepTuning = {6,
                              {
@@ -79,7 +79,7 @@ Mode getCurrentMode() { return currentMode; }
 
 void setCurrentMode(int modeIndex) { currentMode = allModes[modeIndex]; }
 
-float getFrequency(String note, Mode currentMode) {
+float getFrequency(String note) {
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -92,7 +92,7 @@ float getFrequency(String note, Mode currentMode) {
 }
 
 float freqError = 0.1; // compare floats accurately
-String getNote(float frequency, Mode currentMode) {
+String getNote(float frequency) {
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -110,7 +110,7 @@ loop through all guitar strings, find the nearest frequency
 need to also prolly check some harmonics too
 */
 
-NoteAndError findNearestNote(float frequency, Mode currentMode) {
+NoteAndError findNearestNote(float frequency) {
   Note nearestString = {"", "", 0};
   float minError = 1000.0; // should be big enough
   float maxError = 10.0;   // we want to ignore notes that are very far off

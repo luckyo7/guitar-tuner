@@ -9,6 +9,10 @@
 #define SAMPLES 1024 // Must be a power of 2
 #define PITCH_THRESHOLD 0.2
 
+#define NOTE_DISPLAY_TIMEOUT                                                   \
+  2 // wait 2 seconds before clearing display after a result is found
+unsigned long lastNoteTime;
+
 // moving average
 const int movSize = 5; // size of the moving average window
 float previousFrequencies[movSize] = {0.0, 0.0, 0.0, 0.0, 0.0};
@@ -30,6 +34,10 @@ void sampling_loop() {
 
   float frequency = detectPitch(samples, SAMPLES, SAMPLE_RATE, PITCH_THRESHOLD);
 
+  if (frequency < 0) { // got a bad result
+    return;
+  }
+
   Serial.println("Detected frequency: " + String(frequency));
 
   bool withinMovAvg =
@@ -44,13 +52,20 @@ void sampling_loop() {
 
     Serial.println(note.note);
 
+    lastNoteTime = millis();
+
     display.clearDisplay();
     drawNote(note.note, "");
     drawPitch(errorFrac);
     delay(50);
   } else {
-    display.clearDisplay();
-    drawPitch(0);
+    unsigned long currTime = millis(); // current time
+
+    if (lastNoteTime + NOTE_DISPLAY_TIMEOUT > currTime) {
+      // we have timed out
+      display.clearDisplay();
+      drawPitch(0);
+    }
   }
   delay(100);
 }
