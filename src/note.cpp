@@ -70,16 +70,25 @@ Mode indices:
 3 - drop D
 4 - openD
 */
-const Mode allModes[5] = {allTuning, standardTuning, halfStepTuning,
-                          dropDTuning, openDTuning};
+const int numModes = 5;
+const Mode allModes[numModes] = {allTuning, standardTuning, halfStepTuning,
+                                 dropDTuning, openDTuning};
 
-Mode currentMode = standardTuning;
+// const Mode allModes[2] = {allTuning, standardTuning};
 
-Mode getCurrentMode() { return currentMode; }
+int currentMode = 1;
 
-void setCurrentMode(int modeIndex) { currentMode = allModes[modeIndex]; }
+Mode getCurrentMode() { return allModes[currentMode]; }
+
+void setCurrentMode(int modeIndex) { currentMode = modeIndex; }
+
+void incrementCurrentMode() {
+  int newModeIndex = (currentMode + 1) % numModes;
+  currentMode = newModeIndex;
+}
 
 float getFrequency(String note) {
+  Mode currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -93,6 +102,7 @@ float getFrequency(String note) {
 
 float freqError = 0.1; // compare floats accurately
 String getNote(float frequency) {
+  Mode currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -112,6 +122,7 @@ need to also prolly check some harmonics too
 
 NoteAndError findNearestNote(float frequency) {
   Note nearestString = {"", "", 0};
+  Mode currentMode = getCurrentMode();
   float minError = 1000.0; // should be big enough
   float maxError = 10.0;   // we want to ignore notes that are very far off
 
@@ -125,20 +136,5 @@ NoteAndError findNearestNote(float frequency) {
       nearestString = string;
     }
   }
-
-  // if (minError > minHarmonicError) {
-  //   // error is too high, start checking harmonics
-  //   for (int harmonic = minHarmonic; harmonic <= maxHarmonic; harmonic++) {
-  //     // ewww nested loops
-  //     for (int i = 0; i < numNotes; i++) {
-  //       Note string = notes[i];
-  //       if (abs(frequency - string.frequency) <= minError) {
-  //         minError = abs(frequency - string.frequency);
-  //         nearestString = string;
-  //       }
-  //     }
-  //   }
-  // }
-
   return {nearestString, minError};
 }

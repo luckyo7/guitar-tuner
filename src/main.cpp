@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <buttons.h>
 #include <i2s.h>
 #include <note.h>
 #include <sampling.h>
@@ -6,11 +7,11 @@
 
 Mode mode = getCurrentMode();
 void loop() {
+  button_loop();
   sampling_loop();
-  // currentMode = getCurrentMode();
+
   // mode = getCurrentMode();
-  // drawMode(mode);
-  // Serial.println(getCurrentMode().modeName);
+  drawMode(mode.modeName);
 }
 
 void setup() {
@@ -20,13 +21,15 @@ void setup() {
   display.clearDisplay();
 
   drawNote("A", "b");
-  drawMode(mode);
+  // drawMode(mode);
   drawPitch(-0.5);
 
   // i2s setup
   i2s_install();
   i2s_setpin();
   i2s_start(I2S_PORT);
+
+  button_setup();
 
   delay(500);
 }

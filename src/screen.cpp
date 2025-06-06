@@ -67,13 +67,13 @@ void drawPitch(float error) {
   display.display();
 }
 
-void drawMode(Mode mode) {
-  Serial.println(mode.modeName);
-  // display.setTextSize(1);
-  // display.setCursor(1, 1);
-  // display.println(currentMode.modeName);
+void drawMode(String modeName) {
+  // Serial.println(modeName);
+  display.setTextSize(1);
+  display.setCursor(1, 1);
+  display.println(modeName);
 
-  // display.display();
+  display.display();
 }
 
 void screenSetup() {

@@ -7,7 +7,7 @@
 void drawNote(String note, String accidental);
 void drawPitch(float error);
 void screenSetup();
-void drawMode(Mode currentMode);
+void drawMode(String modeName);
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
