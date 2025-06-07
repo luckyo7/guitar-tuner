@@ -18,9 +18,11 @@ int noteX = SCREEN_WIDTH / 2 - TEXT_SIZE * 2;
 int noteY = SCREEN_HEIGHT / 2 - TEXT_SIZE - 10;
 int accidentalX;
 
-void drawNote(String note, String accidental) {
+void drawNote(const String &note, const String &accidental) {
   display.setTextSize(TEXT_SIZE);
   display.setTextColor(WHITE);
+
+  Serial.println(note);
   if (accidental != "") {
     display.setCursor(noteX - TEXT_SIZE * 2, noteY);
     accidentalX = noteX - TEXT_SIZE * 2;
@@ -28,7 +30,7 @@ void drawNote(String note, String accidental) {
     display.setCursor(noteX, noteY);
     accidentalX = noteX;
   }
-  display.println(note);
+  display.print(note);
 
   display.setTextSize(TEXT_SIZE * 0.7);
   display.setCursor(accidentalX + 6 * TEXT_SIZE, noteY);
@@ -67,11 +69,20 @@ void drawPitch(float error) {
   display.display();
 }
 
-void drawMode(String modeName) {
+void drawMode(const String &modeName, const String &noteString) {
   // Serial.println(modeName);
   display.setTextSize(1);
   display.setCursor(1, 1);
   display.println(modeName);
+
+  int16_t x1, y1;
+  uint16_t w, h;
+
+  display.getTextBounds(noteString, 1, 1, &x1, &y1, &w, &h);
+
+  int notesX = SCREEN_WIDTH - w;
+  display.setCursor(notesX, 1);
+  display.println(noteString);
 
   display.display();
 }
@@ -84,16 +95,3 @@ void screenSetup() {
       ; // Don't proceed, loop forever
   }
 }
-// void setup() {
-//   Serial.begin(9600);
-
-//   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-//   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-//     Serial.println(F("SSD1306 allocation failed"));
-//     for(;;); // Don't proceed, loop forever
-//   }
-//   display.clearDisplay();
-
-//   drawNote("F", "#");
-//   drawPitch(-0.5);
-// }

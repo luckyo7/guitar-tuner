@@ -4,10 +4,10 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-void drawNote(String note, String accidental);
+void drawNote(const String &note, const String &accidental);
 void drawPitch(float error);
 void screenSetup();
-void drawMode(String modeName);
+void drawMode(const String &modeName, const String &noteString);
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels

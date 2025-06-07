@@ -16,7 +16,8 @@ void button_loop() {
 
     // reset the display
     display.clearDisplay();
-    drawMode(getCurrentMode().modeName);
+    const Mode &currentMode = getCurrentMode();
+    drawMode(currentMode.modeName, currentMode.noteString);
     drawNote("-", "");
     drawPitch(0.0);
 

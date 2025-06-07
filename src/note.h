@@ -12,14 +12,15 @@ struct Note {
 };
 
 struct NoteAndError {
-  Note note;
+  const Note note;
   float error;
 };
 
 struct Mode {
   int numNotes;
-  Note availableNotes[MAX_NOTES];
-  String modeName;
+  const Note availableNotes[MAX_NOTES];
+  const String modeName;
+  const String noteString; // string of notes to be displayed
 };
 
 // Mode currentMode; // want this to be private
@@ -27,9 +28,9 @@ const Mode &getCurrentMode();
 void setCurrentMode(int modeIndex);
 void incrementCurrentMode();
 
-float getFrequency(String note, Mode currentMode);
-String getNote(float frequency, Mode currentMode);
+float getFrequency(String &note, const Mode &currentMode);
+String getNote(float frequency, const Mode &currentMode);
 
-NoteAndError findNearestNote(float frequency);
+const NoteAndError findNearestNote(float frequency);
 
 #endif

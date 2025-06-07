@@ -10,8 +10,8 @@
 #define PITCH_THRESHOLD 0.2
 
 #define NOTE_DISPLAY_TIMEOUT                                                   \
-  2 // wait 2 seconds before clearing display after a result is found
-unsigned long lastNoteTime;
+  2000 // wait 2 seconds before clearing display after a result is found
+unsigned long lastNoteTime = 0;
 
 // moving average
 const int movSize = 5; // size of the moving average window
@@ -35,6 +35,16 @@ void sampling_loop() {
   float frequency = detectPitch(samples, SAMPLES, SAMPLE_RATE, PITCH_THRESHOLD);
 
   if (frequency < 0) { // got a bad result
+    // unsigned long currTime = millis(); // current time
+
+    // if (lastNoteTime + NOTE_DISPLAY_TIMEOUT < currTime) {
+    //   const Mode &currentMode = getCurrentMode();
+    //   // we have timed out
+    //   display.clearDisplay();
+    //   drawPitch(0);
+    //   drawNote("-", "");
+    //   drawMode(currentMode.modeName, currentMode.noteString);
+    // }
     return;
   }
 
@@ -45,9 +55,10 @@ void sampling_loop() {
 
   appendFrequency(frequency, previousFrequencies, movSize);
 
+  const Mode &currentMode = getCurrentMode();
   if (withinMovAvg && frequency > 0) {
     NoteAndError nearestNote = findNearestNote(frequency);
-    Note note = nearestNote.note;
+    const Note &note = nearestNote.note;
     float errorFrac = nearestNote.error / 2.0;
 
     Serial.println(note.note);
@@ -56,19 +67,18 @@ void sampling_loop() {
 
     display.clearDisplay();
     drawNote(note.note, "");
-    drawMode(getCurrentMode().modeName);
     drawPitch(errorFrac);
     delay(50);
   } else {
     unsigned long currTime = millis(); // current time
 
-    if (lastNoteTime + NOTE_DISPLAY_TIMEOUT > currTime) {
+    if (lastNoteTime + NOTE_DISPLAY_TIMEOUT < currTime) {
       // we have timed out
       display.clearDisplay();
       drawPitch(0);
       drawNote("-", "");
-      drawMode(getCurrentMode().modeName);
     }
   }
+  drawMode(currentMode.modeName, currentMode.noteString); // always draw mode
   delay(100);
 }

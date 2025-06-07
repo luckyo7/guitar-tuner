@@ -13,7 +13,8 @@ const Mode allTuning = {
      {"B", "b", 233.08}, {"B", "", 246.94},  {"C", "", 261.63},
      {"C", "#", 277.18}, {"D", "", 293.66},  {"E", "b", 311.13},
      {"E", "", 329.63}},
-    "All"};
+    "All",
+    "E2-E4"};
 
 const Mode standardTuning = {9,
                              {
@@ -27,7 +28,8 @@ const Mode standardTuning = {9,
                                  {"A", "", 220.00}, // 2nd harmonic of A
                                  {"D", "", 293.66}, // 2nd harmonic of D
                              },
-                             "Standard"};
+                             "Standard",
+                             "EADGBE"};
 
 const Mode halfStepTuning = {6,
                              {
@@ -38,7 +40,8 @@ const Mode halfStepTuning = {6,
                                  {"B", "b", 233.08}, // B  → Bb
                                  {"E", "b", 311.13}, // High E → Eb
                              },
-                             "Half-Step Down"};
+                             "Half-Step Down",
+                             "EbAbDbGbBbEb"};
 
 const Mode dropDTuning = {6,
                           {
@@ -49,7 +52,8 @@ const Mode dropDTuning = {6,
                               {"B", "", 246.94},
                               {"E", "", 329.63},
                           },
-                          "Drop D"};
+                          "Drop D",
+                          "DADGBE"};
 
 const Mode openDTuning = {6,
                           {
@@ -60,7 +64,8 @@ const Mode openDTuning = {6,
                               {"A", "", 220.00},
                               {"D", "", 293.66},
                           },
-                          "Open D"};
+                          "Open D",
+                          "DADFAD"};
 
 /*
 Mode indices:
@@ -87,7 +92,7 @@ void incrementCurrentMode() {
   currentMode = newModeIndex;
 }
 
-float getFrequency(String note) {
+float getFrequency(const String &note) {
   const Mode &currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
@@ -105,7 +110,7 @@ String getNote(float frequency) {
   const Mode &currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
-    Note string = currentMode.availableNotes[i];
+    const Note &string = currentMode.availableNotes[i];
     if (abs(frequency - string.frequency) <= freqError) {
       return string.note;
     }
@@ -120,15 +125,15 @@ loop through all guitar strings, find the nearest frequency
 need to also prolly check some harmonics too
 */
 
-NoteAndError findNearestNote(float frequency) {
+const NoteAndError findNearestNote(float frequency) {
   Note nearestString = {"", "", 0};
   const Mode &currentMode = getCurrentMode();
   float minError = 1000.0; // should be big enough
-  float maxError = 10.0;   // we want to ignore notes that are very far off
+  float maxError = 15.0;   // we want to ignore notes that are very far off
 
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
-    Note string = currentMode.availableNotes[i];
+    const Note &string = currentMode.availableNotes[i];
     float error = frequency - string.frequency;
 
     if (abs(error) <= minError && abs(error) < maxError) {

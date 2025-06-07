@@ -18,6 +18,8 @@ void setup() {
 
   drawNote("-", "");
   drawPitch(0.0);
+  const Mode &currentMode = getCurrentMode();
+  drawMode(currentMode.modeName, currentMode.noteString);
 
   // i2s setup
   i2s_install();
