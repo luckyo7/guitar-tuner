@@ -56,6 +56,7 @@ void sampling_loop() {
 
     display.clearDisplay();
     drawNote(note.note, "");
+    drawMode(getCurrentMode().modeName);
     drawPitch(errorFrac);
     delay(50);
   } else {
@@ -65,6 +66,8 @@ void sampling_loop() {
       // we have timed out
       display.clearDisplay();
       drawPitch(0);
+      drawNote("-", "");
+      drawMode(getCurrentMode().modeName);
     }
   }
   delay(100);

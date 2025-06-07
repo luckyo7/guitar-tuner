@@ -78,7 +78,7 @@ const Mode allModes[numModes] = {allTuning, standardTuning, halfStepTuning,
 
 int currentMode = 1;
 
-Mode getCurrentMode() { return allModes[currentMode]; }
+const Mode &getCurrentMode() { return allModes[currentMode]; }
 
 void setCurrentMode(int modeIndex) { currentMode = modeIndex; }
 
@@ -88,7 +88,7 @@ void incrementCurrentMode() {
 }
 
 float getFrequency(String note) {
-  Mode currentMode = getCurrentMode();
+  const Mode &currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -102,7 +102,7 @@ float getFrequency(String note) {
 
 float freqError = 0.1; // compare floats accurately
 String getNote(float frequency) {
-  Mode currentMode = getCurrentMode();
+  const Mode &currentMode = getCurrentMode();
   int numNotes = currentMode.numNotes;
   for (int i = 0; i < numNotes; i++) {
     Note string = currentMode.availableNotes[i];
@@ -122,7 +122,7 @@ need to also prolly check some harmonics too
 
 NoteAndError findNearestNote(float frequency) {
   Note nearestString = {"", "", 0};
-  Mode currentMode = getCurrentMode();
+  const Mode &currentMode = getCurrentMode();
   float minError = 1000.0; // should be big enough
   float maxError = 10.0;   // we want to ignore notes that are very far off
 

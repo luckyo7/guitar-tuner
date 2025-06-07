@@ -5,13 +5,9 @@
 #include <sampling.h>
 #include <screen.h>
 
-Mode mode = getCurrentMode();
 void loop() {
   button_loop();
   sampling_loop();
-
-  // mode = getCurrentMode();
-  drawMode(mode.modeName);
 }
 
 void setup() {
@@ -20,9 +16,8 @@ void setup() {
   screenSetup();
   display.clearDisplay();
 
-  drawNote("A", "b");
-  // drawMode(mode);
-  drawPitch(-0.5);
+  drawNote("-", "");
+  drawPitch(0.0);
 
   // i2s setup
   i2s_install();

@@ -23,8 +23,9 @@ struct Mode {
 };
 
 // Mode currentMode; // want this to be private
-Mode getCurrentMode();
+const Mode &getCurrentMode();
 void setCurrentMode(int modeIndex);
+void incrementCurrentMode();
 
 float getFrequency(String note, Mode currentMode);
 String getNote(float frequency, Mode currentMode);
