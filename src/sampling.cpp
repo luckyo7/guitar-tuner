@@ -12,6 +12,7 @@
 #define NOTE_DISPLAY_TIMEOUT                                                   \
   2000 // wait 2 seconds before clearing display after a result is found
 unsigned long lastNoteTime = 0;
+String prevNote = "-"; // only want to update note displayed if note has changed
 
 // moving average
 const int movSize = 5; // size of the moving average window
@@ -21,6 +22,20 @@ float maxError = 2; // maximum difference allowed between moving average mean
 // moving average
 
 void sampling_loop() {
+  unsigned long currTime = millis(); // current time
+
+  if (lastNoteTime + NOTE_DISPLAY_TIMEOUT < currTime && prevNote != "-") {
+    Serial.println("Note has timed out");
+    // we have timed out
+    clearNote();
+    clearPitch();
+    drawPitch(0);
+    drawNote("-", "");
+
+    prevNote = "-";
+    lastNoteTime = currTime;
+  }
+
   float samples[SAMPLES];
   size_t bytes_read;
 
@@ -37,14 +52,6 @@ void sampling_loop() {
   if (frequency < 0) { // got a bad result
     // unsigned long currTime = millis(); // current time
 
-    // if (lastNoteTime + NOTE_DISPLAY_TIMEOUT < currTime) {
-    //   const Mode &currentMode = getCurrentMode();
-    //   // we have timed out
-    //   display.clearDisplay();
-    //   drawPitch(0);
-    //   drawNote("-", "");
-    //   drawMode(currentMode.modeName, currentMode.noteString);
-    // }
     return;
   }
 
@@ -64,21 +71,15 @@ void sampling_loop() {
     Serial.println(note.note);
 
     lastNoteTime = millis();
-
-    display.clearDisplay();
-    drawNote(note.note, "");
+    clearPitch();
     drawPitch(errorFrac);
-    delay(50);
-  } else {
-    unsigned long currTime = millis(); // current time
-
-    if (lastNoteTime + NOTE_DISPLAY_TIMEOUT < currTime) {
-      // we have timed out
-      display.clearDisplay();
-      drawPitch(0);
-      drawNote("-", "");
+    if (note.note != prevNote) {
+      prevNote = note.note;
+      clearNote();
+      drawNote(note.note, "");
+      delay(500);
     }
   }
-  drawMode(currentMode.modeName, currentMode.noteString); // always draw mode
+  // drawMode(currentMode.modeName, currentMode.noteString); // always draw mode
   delay(100);
 }

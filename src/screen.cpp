@@ -59,6 +59,12 @@ void drawPitch(float error) {
   // draw reference line for perfect pitch
   display.drawLine(noteLineX, noteLineY1, noteLineX, noteLineY2, WHITE);
 
+  // clamp error between [-1, 1]
+  if (error > 1.0) {
+    error = 1.0;
+  } else if (error < -1.0) {
+    error = -1.0;
+  }
   int errorWidth = pitchBarWidth / 2 * error;
   int errorX = noteLineX + errorWidth;
 
@@ -83,6 +89,36 @@ void drawMode(const String &modeName, const String &noteString) {
   int notesX = SCREEN_WIDTH - w;
   display.setCursor(notesX, 1);
   display.println(noteString);
+
+  display.display();
+}
+
+void clearNote() {
+  // clear the note section of the oled screen
+  display.fillRect(0, yellowHeight, SCREEN_WIDTH, SCREEN_HEIGHT * 0.5, BLACK);
+
+  display.display();
+}
+
+void clearMode() {
+  // clear top 16 rows
+  display.fillRect(0, 0, SCREEN_WIDTH, yellowHeight, BLACK);
+  // display.clearDisplay();
+  display.display();
+}
+
+void clearPitch() {
+  // clear pitch error box
+  display.fillRect(pitchBarX, pitchBarY, pitchBarWidth, pitchBarHeight,
+                   BLACK); // remove entire section
+
+  // fill the empty box back in
+  display.drawRect(
+      pitchBarX, pitchBarY, pitchBarWidth, pitchBarHeight,
+      WHITE); // Draw the empty rectangle that will fill up to display pitch
+
+  // draw reference line for perfect pitch
+  display.drawLine(noteLineX, noteLineY1, noteLineX, noteLineY2, WHITE);
 
   display.display();
 }

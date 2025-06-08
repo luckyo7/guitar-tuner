@@ -41,7 +41,7 @@ const Mode halfStepTuning = {6,
                                  {"E", "b", 311.13}, // High E → Eb
                              },
                              "Half-Step Down",
-                             "EbAbDbGbBbEb"};
+                             ""};
 
 const Mode dropDTuning = {6,
                           {

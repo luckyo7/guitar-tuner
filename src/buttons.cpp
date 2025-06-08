@@ -15,11 +15,11 @@ void button_loop() {
     incrementCurrentMode();
 
     // reset the display
-    display.clearDisplay();
     const Mode &currentMode = getCurrentMode();
+    clearMode();
     drawMode(currentMode.modeName, currentMode.noteString);
-    drawNote("-", "");
-    drawPitch(0.0);
+    // drawNote("-", "");
+    // drawPitch(0.0);
 
     delay(200);
   }

@@ -9,6 +9,10 @@ void drawPitch(float error);
 void screenSetup();
 void drawMode(const String &modeName, const String &noteString);
 
+void clearNote();
+void clearPitch();
+void clearMode();
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
