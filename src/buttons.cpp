@@ -3,8 +3,8 @@
 #include <screen.h>
 // Control power and mode buttons
 
-#define MODE_BUTTON 14
-#define POWER_BUTTON 13
+#define MODE_BUTTON 1
+#define POWER_BUTTON 0
 
 void button_loop() {
   bool modePressed = digitalRead(MODE_BUTTON) == HIGH;

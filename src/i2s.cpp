@@ -5,9 +5,9 @@
 #include <note.h>
 #include <screen.h>
 
-#define I2S_WS 41
-#define I2S_SD 42
-#define I2S_SCK 40
+#define I2S_WS 3
+#define I2S_SD 10
+#define I2S_SCK 4
 
 #define SAMPLE_RATE 16000
 #define SAMPLES 1024 // Must be a power of 2
